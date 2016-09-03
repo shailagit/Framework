@@ -1,0 +1,7 @@
+<suite name="DeltaSuite">
+  <test name="AutomationTest">
+    <classes>
+      <class name="delta.main.DeltaDriver"/>
+    </classes>
+  </test> <!-- Test -->
+</suite> <!-- DeltaSuite -->
