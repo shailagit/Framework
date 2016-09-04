@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Failed suite [DeltaSuite]">
-  <test name="AutomationTest(failed)">
+  <parameter name="browser" value="firefox"/>
+  <parameter name="hubURL" value="http://10.10.4.38:4444/wd/hub"/>
+  <test name="ChromeTest(failed)">
+    <parameter name="browser" value="chrome"/>
     <classes>
       <class name="delta.main.DeltaDriver">
         <methods>
           <include name="endFrameWork"/>
-          <include name="testScenarios" invocation-numbers="0 1"/>
+          <include name="testScenarios"/>
+          <include name="launchApp"/>
           <include name="launchApp"/>
           <include name="quitApp"/>
+          <include name="initFrameWork"/>
           <include name="initFrameWork"/>
         </methods>
       </class> <!-- delta.main.DeltaDriver -->
     </classes>
-  </test> <!-- AutomationTest(failed) -->
+  </test> <!-- ChromeTest(failed) -->
 </suite> <!-- Failed suite [DeltaSuite] -->

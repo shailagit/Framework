@@ -3,9 +3,14 @@ package delta.main;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+import java.net.URL;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
 import org.testng.ITestResult;
 import org.testng.SkipException;
@@ -15,6 +20,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 import org.testng.internal.TestResult;
+import org.testng.xml.XmlTest;
 
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
@@ -27,22 +33,40 @@ import generics.Utility;
 
 public class DeltaDriver extends BaseDriver{
 	
-	
-	
-	
-	
-	
+	public String browser;
+	public String hubURL;
 	@BeforeMethod
-	public void launchApp() throws IOException
+	public void launchApp(XmlTest xmltest) throws IOException
 	{
 		
-		String appURL=Property.getPropertyValue(configPptPath, "URL");
-		String timeOut = Property.getPropertyValue(configPptPath,  "TimeOut");
+		browser=xmltest.getParameter("browser");
+		hubURL=xmltest.getParameter("hubURL");
+		DesiredCapabilities dc = new DesiredCapabilities();
+		dc.setBrowserName(browser);;
+		dc.setPlatform(Platform.ANY);
+		driver = new RemoteWebDriver(new URL(hubURL),dc);
+	
 		
-		driver = new FirefoxDriver();
+	//	without hub node, we can still run the framework with different browsers
+/*		if(browser.equals("chrome"))
+		{
+			System.setProperty("webdriver.chrome.driver", chromeDriverPath);
+			driver=new ChromeDriver();
+			
+		}
+		else
+		{
+			driver=new FirefoxDriver();
+		}*/
+		
+		String appURL=Property.getPropertyValue(configPptPath, "URL");
+		String timeOut = Property.getPropertyValue(configPptPath,  "TimeOut");	
 		driver.get(appURL);
 		driver.manage().timeouts().implicitlyWait(Long.parseLong(timeOut),TimeUnit.SECONDS);
 		driver.manage().window().maximize();
+		
+		
+		
 	}
 	
 	
@@ -50,10 +74,8 @@ public class DeltaDriver extends BaseDriver{
 	@Test(dataProvider="getScenarios")
 	public void testScenarios(String scenarioSheet, String executionStatus)throws InterruptedException
 	{
-		System.out.println(scenarioSheet);
-		System.out.println(executionStatus);
-		
-		testReport = eReport.startTest(scenarioSheet);
+				
+		testReport = eReport.startTest(browser+"_"+scenarioSheet);
 	if(executionStatus.equalsIgnoreCase("yes"))
 	{
 		System.out.println("I'm in yes");
@@ -69,7 +91,7 @@ public class DeltaDriver extends BaseDriver{
 			String msg = "description:"+ description+" action:"+ " input1:"+input1+"input2:"+input2;
 			testReport.log(LogStatus.INFO, msg);
 			KeyWord.executeKeyWord(driver, action, input1, input2);
-			Assert.fail();	
+		//	Assert.fail();	
 		}
 	}else
 	{
@@ -79,9 +101,7 @@ public class DeltaDriver extends BaseDriver{
 				
 }
 	
-	
-
-	
+		
 	@AfterMethod
 	public void quitApp(ITestResult test)
 	{
@@ -93,7 +113,7 @@ public class DeltaDriver extends BaseDriver{
 						
 		}
 		eReport.endTest(testReport);
-		driver.close();
+	//	driver.close();
 	}
 	
 	

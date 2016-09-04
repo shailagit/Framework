@@ -1,7 +1,15 @@
-<suite name="DeltaSuite">
-  <test name="AutomationTest">
+<suite name="DeltaSuite" parallet="tests">
+<parameter name="hubURL" value="http://10.10.4.38:4444/wd/hub"/>
+  <test name="ChromeTest">
+    <parameter name="browser" value="chrome"/>
     <classes>
       <class name="delta.main.DeltaDriver"/>
     </classes>
-  </test> <!-- Test -->
-</suite> <!-- DeltaSuite -->
+  </test> 
+  <test name="FirefoxTest">
+  <parameter name="browser" value="firefox"/>
+    <classes>
+      <class name="delta.main.DeltaDriver"/>
+    </classes>
+  </test> 
+  </suite> <!-- DeltaSuite -->

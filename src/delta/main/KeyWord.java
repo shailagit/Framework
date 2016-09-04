@@ -10,11 +10,17 @@ public class KeyWord {
 		if(action.equalsIgnoreCase("enter"))
 		{
 		
-			driver.findElement(By.xpath(input1)).sendKeys(input2);
+			System.out.println(input1+"Input1 in enter action");
+			System.out.println(input2+"Input2");
+			
+			driver.findElement(Locator.getLocator(input1)).sendKeys(input2);
+			
 			
 		}else if(action.equalsIgnoreCase("click"))
 		{
-			driver.findElement(By.xpath(input1)).click();
+			System.out.println(input1+"Input1 in click action");
+			System.out.println(input2+"Input2");
+			driver.findElement(Locator.getLocator(input1)).click();
 		}else
 		{
 			System.out.println("Invalid action"+action);
